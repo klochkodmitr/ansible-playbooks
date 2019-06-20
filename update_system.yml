@@ -1,0 +1,11 @@
+# Description: Playbook System Upgrade
+# Author: klochkodmitr
+# Date: 2019-06-20
+
+---
+- hosts: all
+  tasks:
+    - name: Upgrade All Packages
+      yum:
+        name: '*'
+        state: latest
