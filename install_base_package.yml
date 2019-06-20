@@ -1,0 +1,12 @@
+---
+- hosts: all
+  tasks:
+    - name: install the latest version of nano
+      yum:
+        name: nano
+        state: latest
+
+    - name: install the latest version of wget
+      yum:
+        name: wget
+        state: latest

@@ -1,0 +1,9 @@
+---
+- hosts: all
+  tasks:
+    - name: install the latest version of nano
+      shell: uname -r
+      register: uname_result
+    - debug: msg="{{ uname_result.stdout }}"
+
+
