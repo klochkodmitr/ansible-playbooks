@@ -1,0 +1,53 @@
+---
+- hosts: all
+  tasks:
+    - name: start firewalld
+      service: name=firewalld state=started enabled=yes
+
+    - name: Firewall settings. Remove service and ports
+      firewalld: zone=dmz service=ssh permanent=true state=disabled
+
+    - name: Firewall settings
+      firewalld: zone=external service=ssh permanent=true state=disabled
+      
+    - name: Firewall settings 
+      firewalld: zone=home service=ssh permanent=true state=disabled
+
+    - name: Firewall settings
+      firewalld: zone=home service=mdns permanent=true state=disabled
+      
+    - name: Firewall settings
+      firewalld: zone=home service=samba-client permanent=true state=disabled
+      
+    - name: Firewall settings
+      firewalld: zone=home service=dhcpv6-client permanent=true state=disabled
+      
+    - name: Firewall settings
+      firewalld: zone=internal service=mdns permanent=true state=disabled
+      
+    - name: Firewall settings
+      firewalld: zone=internal service=samba-client permanent=true state=disabled
+      
+    - name: Firewall settings
+      firewalld: zone=internal service=dhcpv6-client permanent=true state=disabled
+      
+    - name: Firewall settings
+      firewalld: zone=public service=dhcpv6-client permanent=true state=disabled
+      
+    - name: Firewall settings
+      firewalld: zone=public service=ssh permanent=true state=disabled
+
+    - name: Firewall settings      
+      firewalld: zone=work service=ssh permanent=true state=disabled
+    
+    - name: Firewall settings
+      firewalld: zone=work service=dhcpv6-client permanent=true state=disabled
+
+    - name: Firewall settings
+      firewalld: zone=internal interface=ens224 permanent=true state=enabled
+
+    #- name: Firewall settings
+      #firewalld: zone=public interface=ens224 permanent=true state=disabled    
+
+    - name: firewalld reload
+      shell: firewall-cmd --reload

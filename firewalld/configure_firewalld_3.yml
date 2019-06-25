@@ -1,0 +1,41 @@
+---
+- hosts: all
+  tasks:
+    - name: start firewalld
+      service: name=firewalld state=started enabled=yes
+
+    - name: firewalld -- reconfigure interface
+      shell: firewall-cmd --permanent --zone=internal --add-interface=ens224
+
+    - name: firewalld -- change default services 
+      firewalld:
+        zone: "{{ item.zone }}"
+        service: "{{ item.service }}"
+        permanent: true
+        state: "{{ item.state }}"
+      with_items:
+       # public zone
+        - { zone: 'public', service: 'ssh', state: 'disabled' }
+        - { zone: 'public', service: 'dhcpv6-client', state: 'disabled' }
+        - { zone: 'public', service: 'http', state: 'enabled' }
+        - { zone: 'public', service: 'https', state: 'enabled' }
+       # internal zone
+        - { zone: 'internal', service: 'ssh', state: 'enabled' }
+        - { zone: 'internal', service: 'mdns', state: 'disabled' }
+        - { zone: 'internal', service: 'samba-client', state: 'disabled' }
+        - { zone: 'internal', service: 'dhcpv6-client', state: 'disabled' }
+       # dmz zone
+        - { zone: 'dmz', service: 'ssh', state: 'disabled' }
+       # external zone
+        - { zone: 'external', service: 'ssh', state: 'disabled' }
+       # home zone
+        - { zone: 'home', service: 'ssh', state: 'disabled' }
+        - { zone: 'home', service: 'mdns', state: 'disabled' }
+        - { zone: 'home', service: 'samba-client', state: 'disabled' }
+        - { zone: 'home', service: 'dhcpv6-client', state: 'disabled' }
+       # work zone
+        - { zone: 'work', service: 'ssh', state: 'disabled' }
+        - { zone: 'work', service: 'dhcpv6-client', state: 'disabled' }
+
+    - name: firewalld -- reload
+      shell: firewall-cmd --reload

@@ -1,0 +1,21 @@
+---
+- hosts: WEBSRV-NULLA.devbox.domain
+  tasks:
+    - name: Set hostname
+      hostname:
+        name: WEBSRV-NULLA.devbox.domain
+
+    - name: Disable SELinux
+      selinux:
+        state: disabled
+
+    - name: Copy file with owner and permissions
+      copy:
+        src: /etc/ansible/sysconfig/websrv-nulla.devbox.domain/etc/sysconfig/network-scripts/ifcfg-ens192
+        dest: /etc/sysconfig/network-scripts/ifcfg-ens192
+        owner: root
+        group: root
+        mode: '0600'
+    
+     - name: Copy file with owner and permissions
+       shell: ifup ens192

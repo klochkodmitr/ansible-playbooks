@@ -1,0 +1,64 @@
+---
+- hosts: all
+  tasks:
+    - name: start firewalld
+      service: name=firewalld state=started enabled=yes
+
+    - name: Remove 'dhcpv6-client' Service from 'public' zones
+      firewalld:
+        service: dhcpv6-client
+        zone: public
+        permanent: true
+        state: disabled
+
+    - name: Remove 'ssh' Service from 'public' zones
+      firewalld:      
+        service: ssh
+        zone: public   
+        permanent: true
+        state: disabled
+
+    - name: Remove 'mdns' Service from 'internal' zones
+      firewalld:
+        service: mdns
+        zone: internal
+        permanent: true
+        state: disabled
+
+    - name: Remove 'samba-client' Service from 'internal' zones     
+      firewalld:
+        service: samba-client
+        zone: internal
+        permanent: true
+        state: disabled
+
+    - name: Remove 'dhcpv6-client' Service from 'internal' zones
+      firewalld:
+        service: dhcpv6-client
+        zone: internal
+        permanent: true
+        state: disabled
+
+    - name: Add 'ssh' service to 'internal' zone
+      firewalld:
+        service: ssh
+        zone: internal
+        permanent: yes
+        state: enabled
+
+    - name: Add 'eth224' interface to 'internal' zone
+      firewalld:
+        zone: internal
+        interface: eth224
+        permanent: true
+        state: enabled
+
+    - name: Remove 'eth224' interface to 'public' zone
+      firewalld:
+        zone: public
+        interface: eth224
+        permanent: true
+        state: disabled
+
+    - name: firewalld reload
+      command: firewall-cmd --reload
